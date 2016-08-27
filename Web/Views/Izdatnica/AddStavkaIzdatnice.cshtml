@@ -1,0 +1,55 @@
+﻿@model Web.ViewModels.IzdatnicaViewModel
+
+@{
+    ViewBag.Title = "Nova stavka";
+}
+
+<h2>Nova stavka izdatnice @Model.Izdatnica.ID</h2>
+
+@using (Html.BeginForm("AddStavkaIzdatnice", "Izdatnica", FormMethod.Post))
+{
+    @Html.HiddenFor(x => x.Izdatnica.ID)
+    @Html.HiddenFor(x => x.Izdatnica.DjelatnikID)
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        <h4>Primku kreira: @Model.Izdatnica.Djelatnik.Fullname</h4>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.StavkaIzdatnice.ProizvodID, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.StavkaIzdatnice.ProizvodID, Model.Proizvodi, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.StavkaIzdatnice.ProizvodID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.StavkaIzdatnice.Kolicina, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.StavkaIzdatnice.Kolicina, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.StavkaIzdatnice.Kolicina, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Kreiraj ili uredi postojeću stavku" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+
+    <hr/>
+
+    @Html.Partial(
+        "_StavkeIzdatniceTable",
+        Model.Izdatnica.StavkeIzdatnice,
+        new ViewDataDictionary(this.ViewData) { { "edit", true }, { "viewName", "AddStavkaIzdatnice" } }
+    )
+}
+
+<div>
+    <hr />
+        @Html.ActionLink("<< Izdatnica", "Edit", new { id = Model.Izdatnica.ID }) | 
+        @Html.ActionLink("Završi >>", "Index")
+</div>

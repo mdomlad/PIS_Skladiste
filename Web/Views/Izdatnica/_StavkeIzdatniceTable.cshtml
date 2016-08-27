@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Web.Models.BirmiStorage.StavkaIzdatnice>
+
+<table data-toggle="table">
+    <thead>
+        <tr class="panel-heading">
+            <th>Proizvod</th>
+            <th>Količina</th>
+            <th>Jed. Mj.</th>
+            <th>Cijena po jed. mj</th>
+            <th>Ukupna cijena</th>
+            @if ((bool)ViewData["edit"])
+            {
+                <th></th>
+            }            
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Proizvod.Naziv</td>
+                <td>@item.Kolicina.ToString("F")</td>
+                <td>@item.Proizvod.SkladisteLokacija.JedinicaMjere.Naziv</td>
+                <td>@item.Proizvod.Cijena.ToString("F")</td>
+                <td>@((item.Proizvod.Cijena * item.Kolicina).ToString("F"))</td>
+                @if ((bool)ViewData["edit"])
+                {
+                    <td>
+                        <a href="@Url.Action("DeleteStavkaIzdatnice", new { IzdatnicaID = item.Izdatnica.ID, ProizvodID = item.ProizvodID, ViewName = ViewData["viewName"] })" class="btn btn-danger"><i class="glyphicon glyphicon-minus-sign"></i></a>
+                    </td>
+                } 
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr class="panel-footer">
+            <td colspan="4">Sveukupno</td>
+            <td colspan="2">@Model.Sum(x => x.Kolicina * x.Proizvod.Cijena).ToString("C2")</td>
+        </tr>
+    </tfoot>
+</table>

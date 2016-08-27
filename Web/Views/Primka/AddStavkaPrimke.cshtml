@@ -1,0 +1,55 @@
+﻿@model Web.ViewModels.PrimkaViewModel
+
+@{
+    ViewBag.Title = "Nova stavka";
+}
+
+<h2>Nova stavka primke @Model.Primka.ID</h2>
+
+@using (Html.BeginForm("AddStavkaPrimke", "Primka", FormMethod.Post))
+{
+    @Html.HiddenFor(x => x.Primka.ID)
+    @Html.HiddenFor(x => x.Primka.DjelatnikID)
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        <h4>Primku kreira: @Model.Primka.Djelatnik.Fullname</h4>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.StavkaPrimke.ProizvodID, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.StavkaPrimke.ProizvodID, Model.Proizvodi, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.StavkaPrimke.ProizvodID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.StavkaPrimke.Kolicina, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.StavkaPrimke.Kolicina, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.StavkaPrimke.Kolicina, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Kreiraj ili uredi postojeću stavku" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+
+    <hr/>
+
+    @Html.Partial(
+        "_StavkePrimkeTable",
+        Model.Primka.StavkePrimke,
+        new ViewDataDictionary(this.ViewData) { { "edit", true }, { "viewName", "AddStavkaPrimke" } }
+    )
+}
+
+<div>
+    <hr />
+    @Html.ActionLink("<< Primka", "Edit", new { id = Model.Primka.ID })
+    @Html.ActionLink("Završi >>", "Index")
+</div>

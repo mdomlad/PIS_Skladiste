@@ -1,0 +1,37 @@
+﻿@{
+    ViewBag.Title = "Izbornik";
+}
+
+
+<div class="row">
+    <div class="col-xs-6">
+        <a href="@Url.Action("Index", "Primka")" class="btn btn-lg btn-primary"><span class="glyphicon glyphicon-log-in"></span> Primka</a>
+    </div>
+    <div class="col-xs-6">
+        <a href="@Url.Action("Index", "Izdatnica")" class="btn btn-lg btn-warning"><span class="glyphicon glyphicon-log-out"></span> Izdatnica</a>
+    </div>
+</div>
+
+<hr/>
+<div class="row">
+    <div class="col-xs-6">
+        <a href="@Url.Action("Index", "Proizvod")" class="btn btn-lg btn-warning"><span class="glyphicon glyphicon-shopping-cart"></span> Proizvod</a>
+    </div>
+    <div class="col-xs-6">
+        <a href="@Url.Action("Index", "Manage")" class="btn btn-lg btn-success"><span class="glyphicon glyphicon-user"></span> Profil</a>
+    </div>
+</div>
+
+
+@if (User.IsInRole("admin") || User.IsInRole("supervisor"))
+{
+    <hr />
+    <div class="row">
+        <div class="col-xs-6">
+            <a href="@Url.Action("MasterData", "Home")" class="btn btn-lg btn-danger"><span class="glyphicon glyphicon-import"></span> Matični Podaci</a>
+        </div>
+        <div class="col-xs-6">
+            <a href="@Url.Action("Index", "Report")" class="btn btn-lg btn-info"><span class="glyphicon glyphicon-stats"></span> Izvještaj</a>
+        </div>
+    </div>
+}

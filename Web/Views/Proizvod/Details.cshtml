@@ -1,0 +1,77 @@
+﻿@model Web.Models.BirmiStorage.Proizvod
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div>
+    <h4>Proizvod @Model.ID</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Naziv)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Naziv)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Opis)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Opis)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cijena)
+        </dt>
+
+        <dd>
+            @Model.Cijena.ToString("F")
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SkladisteLokacija.JedinicaMjere.Naziv)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SkladisteLokacija.JedinicaMjere.Naziv)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SkladisteLokacija.MinimalnaKolicina)
+        </dt>
+
+        <dd>
+            @Model.SkladisteLokacija.MinimalnaKolicina.ToString("F")
+        </dd>
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SkladisteLokacija.MaksimalnaKolicina)
+        </dt>
+
+        <dd>
+            @Model.SkladisteLokacija.MaksimalnaKolicina.ToString("F")
+        </dd>
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SkladisteLokacija.Stanje)
+        </dt>
+
+        <dd>
+            @Model.SkladisteLokacija.Stanje.ToString("F")
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("<< Nazad", "Index")
+    @if (User.IsInRole("admin") || User.IsInRole("supervisor"))
+     {
+        @:| @Html.ActionLink("Uredi >>", "Edit", new { id = Model.ID })
+     }
+</p>

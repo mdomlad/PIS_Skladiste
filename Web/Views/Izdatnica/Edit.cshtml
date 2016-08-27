@@ -1,0 +1,84 @@
+﻿@using Web.Models.BirmiStorage
+@model Web.ViewModels.IzdatnicaViewModel
+
+@{
+    ViewBag.Title = "Uređivanje";
+}
+
+<h2></h2>
+
+@using (Html.BeginForm("Edit", "Izdatnica", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Izdatnica</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Izdatnica.ID)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Izdatnica.DjelatnikID, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Izdatnica.DjelatnikID, Model.Djelatnici, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Izdatnica.DjelatnikID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Izdatnica.DatumIzdavanja, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Izdatnica.DatumIzdavanja, new { htmlAttributes = new { @class = "datepicker form-control" } })
+                @Html.ValidationMessageFor(model => model.Izdatnica.DatumIzdavanja, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @if (User.IsInRole("admin") || User.IsInRole("supervisor"))
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.Izdatnica.StatusID, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.Izdatnica.StatusID, Model.StatusiDokumenta, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Izdatnica.StatusID, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+
+        @if (!Model.IsCanceled || !Model.IsClosed)
+        {
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-2">
+                <input type="submit" value="Spremi" class="btn btn-default" />
+            </div>
+            @if (User.IsInRole("worker"))
+            {
+                if (Model.Izdatnica.Status.Label == StatusDokumenta.INIT)
+                {
+                            <div class="col-md-2">
+                                <a href="@Url.Action("PromijeniStatus", new { izdatnicaId = Model.Izdatnica.ID, nextStatusLbl = StatusDokumenta.PENDING })" class="btn btn-info"><i class="glyphicon glyphicon-tasks"></i>Preuzmi na obradu</a>
+                            </div>
+                }
+                else if (Model.Izdatnica.Status.Label == StatusDokumenta.PENDING)
+                {
+                            <div class="col-md-2">
+                                <a href="@Url.Action("PromijeniStatus", new { izdatnicaId = Model.Izdatnica.ID, nextStatusLbl = StatusDokumenta.CLOSED })" class="btn btn-info"><i class="glyphicon glyphicon-folder-close"></i>Zatvori</a>
+                            </div>
+                }
+            }
+            <div class="col-md-2">
+                <a href="@Url.Action("AddStavkaIzdatnice", new { izdatnicaId = Model.Izdatnica.ID })" class="btn btn-info"><i class="glyphicon glyphicon-plus-sign"></i>Uredi stavke</a>
+            </div>
+        </div>
+        }
+    </div>
+}
+
+@Html.Partial(
+        "_StavkeIzdatniceTable",
+        Model.Izdatnica.StavkeIzdatnice,
+        new ViewDataDictionary(this.ViewData) { { "edit", true }, { "viewName", "Edit" } }
+    )
+
+<div>
+    @Html.ActionLink("<< Nazad", "Index")
+</div>

@@ -1,0 +1,61 @@
+﻿@using Web.Models.BirmiStorage
+@model Web.ViewModels.IzdatnicaViewModel
+
+@{
+    ViewBag.Title = "Detalji";
+}
+
+<h2>Detalji izdatnice</h2>
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            Oznaka
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Izdatnica.ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Izdatnica.Djelatnik.Fullname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Izdatnica.Djelatnik.Fullname)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Izdatnica.DatumIzdavanja)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Izdatnica.DatumIzdavanja)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Izdatnica.Status.Naziv)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Izdatnica.Status.Naziv)
+        </dd>
+
+    </dl>
+</div>
+
+<h4>Stavke</h4>
+<hr />
+@Html.Partial(
+        "_StavkeIzdatniceTable",
+        Model.Izdatnica.StavkeIzdatnice,
+        new ViewDataDictionary(this.ViewData) { { "edit", false } }
+    )
+
+<p>
+    @if (!Model.IsClosed && !Model.IsCanceled)
+    {
+        Html.ActionLink("Uredi", "Edit", new { id = Model.Izdatnica.ID }); @:|
+    }
+    @Html.ActionLink("<< Nazad", "Index")
+</p>

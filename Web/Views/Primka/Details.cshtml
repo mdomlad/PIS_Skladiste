@@ -1,0 +1,53 @@
+﻿@using Web.Models.BirmiStorage
+@model Web.ViewModels.PrimkaViewModel
+
+@{
+    ViewBag.Title = "Detalji";
+}
+
+<h2>Detalji primke</h2>
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Primka.Djelatnik.Fullname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Primka.Djelatnik.Fullname)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Primka.DatumZaprimanja)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Primka.DatumZaprimanja)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Primka.Status.Naziv)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Primka.Status.Naziv)
+        </dd>
+
+    </dl>
+</div>
+
+<h4>Stavke Primke</h4>
+<hr />
+@Html.Partial(
+        "_StavkePrimkeTable",
+        Model.Primka.StavkePrimke,
+        new ViewDataDictionary(this.ViewData) { { "edit", false } }
+    )
+
+<p>
+    @if (Model.Primka.Status.Label != StatusDokumenta.CANCELED && Model.Primka.Status.Label != StatusDokumenta.CLOSED)
+    {
+        Html.ActionLink("Uredi", "Edit", new { id = Model.Primka.ID }); @:|
+    }
+    @Html.ActionLink("<< Nazad", "Index")
+</p>

@@ -1,0 +1,77 @@
+﻿@using Web.Models.BirmiStorage
+@model Web.ViewModels.PrimkaViewModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2></h2>
+
+@using (Html.BeginForm("Edit", "Primka", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Primka</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Primka.ID)
+        @Html.HiddenFor(model => model.Primka.DjelatnikID)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Primka.DjelatnikID, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Primka.Djelatnik, Model.Djelatnici, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Primka.DjelatnikID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Primka.DatumZaprimanja, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Primka.DatumZaprimanja, new { htmlAttributes = new { @class = "datepicker form-control" } })
+                @Html.ValidationMessageFor(model => model.Primka.DatumZaprimanja, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @if (User.IsInRole("admin") || User.IsInRole("supervisor"))
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.Primka.StatusID, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.Primka.StatusID, Model.StatusiDokumenta, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Primka.StatusID, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        } 
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-2">
+                <input type="submit" value="Spremi" class="btn btn-default" />
+            </div>
+            @if (User.IsInRole("worker"))
+            {
+                if(Model.Primka.Status.Label == StatusDokumenta.INIT)
+                {
+                    <div class="col-md-2">
+                        <a href="@Url.Action("PromijeniStatus", new { primkaId = Model.Primka.ID, nextStatusLbl = StatusDokumenta.PENDING})" class="btn btn-info"><i class="glyphicon glyphicon-tasks"></i>Preuzmi na obradu</a>
+                    </div>
+                } else if(Model.Primka.Status.Label == StatusDokumenta.PENDING) { 
+                    <div class="col-md-2">
+                        <a href="@Url.Action("PromijeniStatus", new { primkaId = Model.Primka.ID, nextStatusLbl = StatusDokumenta.CLOSED })" class="btn btn-info"><i class="glyphicon glyphicon-folder-close"></i>Zatvori</a>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+}
+
+@Html.Partial(
+        "_StavkePrimkeTable",
+        Model.Primka.StavkePrimke,
+        new ViewDataDictionary(this.ViewData) { { "edit", true }, { "viewName", "Edit" } }
+    )
+
+<div>
+    @Html.ActionLink("<< Nazad", "Index")
+</div>
