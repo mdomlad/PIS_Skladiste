@@ -24,6 +24,11 @@
                     <li>@Html.ActionLink("Primka", "Index", "Primka")</li>
                     <li>@Html.ActionLink("Izdatnica", "Index", "Izdatnica")</li>
                     <li>@Html.ActionLink("Proizvod", "Index", "Proizvod")</li>
+                    @if (User.IsInRole("admin") || User.IsInRole("supervisor"))
+                    {
+                        <li>@Html.ActionLink("Izvještaji", "Index", "Report")</li>
+                    }
+                    
                     @if (User.IsInRole("admin"))
                     {
                         @Html.Partial("_MasterData")

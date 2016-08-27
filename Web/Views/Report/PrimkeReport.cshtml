@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Web.Models.BirmiStorage.Primka>
+
+@{
+    ViewBag.Title = "Izvještaji";
+    Layout = "~/Views/Shared/_PdfLayout.cshtml";
+}
+
+<h2>Popis primki</h2>
+
+<table class="table" data-toggle="table">
+    <tr>
+        <th>
+            Oznaka
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Djelatnik.Fullname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DatumZaprimanja)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status.Naziv)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Djelatnik.Fullname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DatumZaprimanja)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status.Naziv)
+            </td>
+        </tr>
+    }
+
+</table>

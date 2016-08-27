@@ -22,7 +22,6 @@ namespace Web.Models
         public DbSet<Proizvod> Proizvod { get; set; }
         public DbSet<Izdatnica> Izdatnica { get; set; }
         public DbSet<Primka> Primka { get; set; }
-        public DbSet<PlanSkladistenja> PlanSkladistenja { get; set; }
         public DbSet<SkladisteLokacija> SkladisteLokacija { get; set; }
         public DbSet<StavkaPrimke> StavkaPrimke { get; set; }
         public DbSet<StavkaIzdatnice> StavkaIzdatnice { get; set; }

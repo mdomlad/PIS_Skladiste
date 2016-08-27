@@ -21,7 +21,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Primka.DjelatnikID, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.Primka.Djelatnik, Model.Djelatnici, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.Primka.DjelatnikID, Model.Djelatnici, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Primka.DjelatnikID, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -62,6 +62,9 @@
                     </div>
                 }
             }
+            <div class="col-md-2">
+                <a href="@Url.Action("AddStavkaPrimke", new { primkaId = Model.Primka.ID })" class="btn btn-info"><i class="glyphicon glyphicon-shopping-cart"></i>Dodaj stavku</a>
+            </div>
         </div>
     </div>
 }

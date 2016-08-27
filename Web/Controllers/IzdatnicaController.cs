@@ -18,7 +18,7 @@ namespace Web.Controllers
     public class IzdatnicaController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        
+
         public async Task<ActionResult> Index()
         {
             var primka = db.Izdatnica
@@ -26,7 +26,7 @@ namespace Web.Controllers
                 .Include(p => p.Status);
             return View(await primka.ToListAsync());
         }
-        
+
         public ActionResult Details(int? id)
         {
             if (!id.HasValue)
@@ -36,12 +36,12 @@ namespace Web.Controllers
 
             return View(new IzdatnicaViewModel(id.Value));
         }
-        
+
         public ActionResult Create()
         {
             return View(new IzdatnicaViewModel());
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(IzdatnicaViewModel izdatnicaVM)
@@ -57,7 +57,7 @@ namespace Web.Controllers
 
             return View(new IzdatnicaViewModel());
         }
-        
+
         public ActionResult AddStavkaIzdatnice(int? izdatnicaId)
         {
             if (!izdatnicaId.HasValue) return HttpNotFound();
@@ -80,13 +80,14 @@ namespace Web.Controllers
             if (ModelState.IsValid)
             {
                 var stavkaIzdatnice = db.StavkaIzdatnice.Find(izdatnicaVM.Izdatnica.ID, izdatnicaVM.StavkaIzdatnice.ProizvodID);
-                var skladiste = await db.SkladisteLokacija.FindAsync(izdatnicaVM.StavkaIzdatnice.ProizvodID);
+                var skladiste = await db.SkladisteLokacija
+                    .Include(x => x.JedinicaMjere)
+                    .SingleAsync(x => x.ProizvodID == izdatnicaVM.StavkaIzdatnice.ProizvodID);
 
                 if (stavkaIzdatnice != null)
                 {
-                    var diff = izdatnicaVM.StavkaIzdatnice.Kolicina - stavkaIzdatnice.Kolicina;
-                    stavkaIzdatnice.Kolicina = izdatnicaVM.StavkaIzdatnice.Kolicina;
-                    skladiste.Stanje -= diff;
+                    stavkaIzdatnice.Kolicina += izdatnicaVM.StavkaIzdatnice.Kolicina;
+                    skladiste.Stanje -= izdatnicaVM.StavkaIzdatnice.Kolicina;
                     db.Entry(stavkaIzdatnice).State = EntityState.Modified;
                 }
                 else {
@@ -94,9 +95,17 @@ namespace Web.Controllers
                     db.StavkaIzdatnice.Add(izdatnicaVM.StavkaIzdatnice);
                     skladiste.Stanje -= izdatnicaVM.StavkaIzdatnice.Kolicina;
                 }
-                db.Entry(skladiste).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                this.AddNotification("Stavka je uspješno dodana", NotificationType.SUCCESS);
+
+                if (skladiste.Stanje < 0)
+                {
+                    this.AddNotification(string.Format("Nema dovoljno proizvoda na stanju. Uzeli ste {0} {1} previše", Math.Abs(skladiste.Stanje), skladiste.JedinicaMjere.Naziv), NotificationType.ERROR);
+                }
+                else 
+                {
+                    db.Entry(skladiste).State = EntityState.Modified;
+                    await db.SaveChangesAsync();
+                    this.AddNotification("Stavka je uspješno dodana", NotificationType.SUCCESS);
+                }
             }
 
             return View(new IzdatnicaViewModel(izdatnicaVM.Izdatnica.ID));
@@ -127,7 +136,7 @@ namespace Web.Controllers
 
             return new HttpNotFoundResult();
         }
-        
+
         public ActionResult Edit(int? id)
         {
             if (!id.HasValue)

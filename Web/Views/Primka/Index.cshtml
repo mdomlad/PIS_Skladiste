@@ -46,7 +46,8 @@
             {
                 @Html.ActionLink("Uredi", "Edit", new { id = item.ID }) @:|
             }
-            @Html.ActionLink("Detalji", "Details", new { id=item.ID }) 
+            @Html.ActionLink("Detalji", "Details", new { id=item.ID }) | 
+            <a target="_blank" href="@Url.Action("PrimkaReport", "Report",  new { id = item.ID })" class="btn btn-danger"><i class="glyphicon glyphicon-paperclip"></i> PDF</a>
         </td>
     </tr>
 }

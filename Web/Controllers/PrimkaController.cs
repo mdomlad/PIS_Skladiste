@@ -84,10 +84,8 @@ namespace Web.Controllers
 
                 if (stavkaPrimke != null)
                 {
-                    var diff = primkaVM.StavkaPrimke.Kolicina - stavkaPrimke.Kolicina;
-                    stavkaPrimke.Kolicina = primkaVM.StavkaPrimke.Kolicina;
-                    skladiste.Stanje += diff;
-                    stavkaPrimke.Kolicina = primkaVM.StavkaPrimke.Kolicina;
+                    skladiste.Stanje += primkaVM.StavkaPrimke.Kolicina;
+                    stavkaPrimke.Kolicina += primkaVM.StavkaPrimke.Kolicina;
                     db.Entry(stavkaPrimke).State = EntityState.Modified;
                 }
                 else {
@@ -96,8 +94,15 @@ namespace Web.Controllers
                     skladiste.Stanje += primkaVM.StavkaPrimke.Kolicina;
                 }
                 db.Entry(skladiste).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                this.AddNotification("Stavka je uspješno dodana", NotificationType.SUCCESS);
+
+                if (skladiste.Stanje >= 0)
+                {
+                    await db.SaveChangesAsync();
+                    this.AddNotification("Stavka je uspješno dodana", NotificationType.SUCCESS);
+                }
+                else {
+                    this.AddNotification("Stavka nije uspješno dodana. Nema dovoljno na stanju.", NotificationType.SUCCESS);
+                }
             }
 
             return View(new PrimkaViewModel(primkaVM.Primka.ID));
@@ -113,22 +118,28 @@ namespace Web.Controllers
             }
             if (PrimkaID.HasValue && ProizvodID.HasValue)
             {
-                var existing = db.StavkaPrimke.Find(PrimkaID.Value, ProizvodID.Value);
-                var skladiste = await db.SkladisteLokacija.FindAsync(primkaVM.StavkaPrimke.ProizvodID);
+                var existing = await db.StavkaPrimke.FindAsync(PrimkaID.Value, ProizvodID.Value);
+                var skladiste = await db.SkladisteLokacija.FindAsync(ProizvodID.Value);
                 if (existing != null)
                 {
                     skladiste.Stanje -= existing.Kolicina;
-                    db.StavkaPrimke.Remove(existing);
-                    db.Entry(skladiste).State = EntityState.Modified;
-                    await db.SaveChangesAsync();
+                    if (skladiste.Stanje < 0)
+                    {
+                        this.AddNotification("Stavka nije uspješno obrisana. Stanje ne može otići u minus.", NotificationType.ERROR);
+                    }
+                    else {
+                        db.StavkaPrimke.Remove(existing);
+                        db.Entry(skladiste).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
+                        this.AddNotification("Stavka je uspješno obrisana", NotificationType.SUCCESS);
+                    }
                 }
-                this.AddNotification("Stavka je uspješno obrisana", NotificationType.SUCCESS);
-                return View(ViewName, primkaVM);
+                return View(ViewName, new PrimkaViewModel(PrimkaID.Value));
             }
 
             return new HttpNotFoundResult();
         }
-        
+
         public ActionResult Edit(int? id)
         {
             if (!id.HasValue)
@@ -144,7 +155,7 @@ namespace Web.Controllers
             ViewBag.DjelatnikID = new SelectList(db.Users, "Id", "Email", viewModel.Primka.DjelatnikID);
             return View(viewModel);
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(PrimkaViewModel primkaVM)

@@ -1,8 +1,8 @@
-﻿@using Web.Models.BirmiStorage
-@model Web.ViewModels.PrimkaViewModel
+﻿@model Web.ViewModels.PrimkaViewModel
 
 @{
-    ViewBag.Title = "Detalji";
+    ViewBag.Title = "Izvještaji";
+    Layout = "~/Views/Shared/_PdfLayout.cshtml";
 }
 
 <h2>Detalji primke</h2>
@@ -43,11 +43,3 @@
         Model.Primka.StavkePrimke,
         new ViewDataDictionary(this.ViewData) { { "edit", false } }
     )
-
-<p>
-    @Html.ActionLink("<< Nazad", "Index")
-    @if (Model.Primka.Status.Label != StatusDokumenta.CANCELED && Model.Primka.Status.Label != StatusDokumenta.CLOSED)
-    {
-        @:| @Html.ActionLink("Uredi >>", "Edit", new { id = Model.Primka.ID }) 
-    }
-</p>

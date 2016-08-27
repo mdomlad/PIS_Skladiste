@@ -48,11 +48,23 @@
       <HintPath>..\packages\bootstrap-table.mvc.1.1.1\lib\net452\BootstrapTable.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="itextsharp, Version=5.5.9.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.9\lib\itextsharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="itextsharp.xmlworker, Version=5.5.9.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\itextsharp.xmlworker.5.5.9\lib\itextsharp.xmlworker.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MvcRazorToPdf, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvcRazorToPdf.1.0.2\lib\40\MvcRazorToPdf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -178,6 +190,7 @@
     <Compile Include="Controllers\IzdatnicaController.cs" />
     <Compile Include="Controllers\PrimkaController.cs" />
     <Compile Include="Controllers\ProizvodController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\StatusDokumentaController.cs" />
     <Compile Include="Extensions\NotificationExtensions.cs" />
     <Compile Include="Global.asax.cs">
@@ -235,13 +248,16 @@
     <Compile Include="Migrations\201608271221584_CalculatingStanje.Designer.cs">
       <DependentUpon>201608271221584_CalculatingStanje.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201608271238374_Skladiste1.cs" />
+    <Compile Include="Migrations\201608271238374_Skladiste1.Designer.cs">
+      <DependentUpon>201608271238374_Skladiste1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationContext.cs" />
     <Compile Include="Models\BirmiStorage\Djelatnik.cs" />
     <Compile Include="Models\BirmiStorage\Izdatnica.cs" />
     <Compile Include="Models\BirmiStorage\JedinicaMjere.cs" />
-    <Compile Include="Models\BirmiStorage\PlanSkladistenja.cs" />
     <Compile Include="Models\BirmiStorage\Primka.cs" />
     <Compile Include="Models\BirmiStorage\Proizvod.cs" />
     <Compile Include="Models\BirmiStorage\SkladisteLokacija.cs" />
@@ -274,6 +290,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <None Include="Properties\PublishProfiles\pisfoi.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\bootstrap-table\bootstrap-table.js" />
     <Content Include="Scripts\bootstrap-table\bootstrap-table.min.js" />
@@ -376,14 +393,21 @@
     <Content Include="Views\Proizvod\Index.cshtml" />
     <Content Include="Views\Primka\AddStavkaPrimke.cshtml" />
     <Content Include="Views\Shared\_Notifications.cshtml" />
-    <Content Include="Views\Primka\_StavkePrimkeTable.cshtml" />
-    <Content Include="Views\Izdatnica\_StavkeIzdatniceTable.cshtml" />
+    <Content Include="Views\Shared\_StavkePrimkeTable.cshtml" />
+    <Content Include="Views\Shared\_StavkeIzdatniceTable.cshtml" />
     <Content Include="Views\Izdatnica\AddStavkaIzdatnice.cshtml" />
     <Content Include="Views\Izdatnica\Create.cshtml" />
     <Content Include="Views\Izdatnica\Details.cshtml" />
     <Content Include="Views\Izdatnica\Edit.cshtml" />
     <Content Include="Views\Izdatnica\Index.cshtml" />
     <Content Include="Views\Home\MasterData.cshtml" />
+    <Content Include="Views\Shared\_PdfLayout.cshtml" />
+    <Content Include="Views\Report\ProizvodReport.cshtml" />
+    <Content Include="Views\Report\Index.cshtml" />
+    <Content Include="Views\Report\PrimkeReport.cshtml" />
+    <Content Include="Views\Report\PrimkaReport.cshtml" />
+    <Content Include="Views\Report\IzdatnicaReport.cshtml" />
+    <Content Include="Views\Report\IzdatniceReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -433,6 +457,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201608271221584_CalculatingStanje.resx">
       <DependentUpon>201608271221584_CalculatingStanje.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608271238374_Skladiste1.resx">
+      <DependentUpon>201608271238374_Skladiste1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -34,6 +34,5 @@ namespace Web.Models.BirmiStorage
 
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0,00}")]
         public double Stanje { get; set; }
-        public ICollection<PlanSkladistenja> PlanoviSkladistenja { get; set; }
     }
 }

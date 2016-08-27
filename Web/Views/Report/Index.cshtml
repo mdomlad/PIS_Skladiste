@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "Izvještaji";
+}
+
+
+    <div class="row">
+        <div class="col-xs-6">
+            <a href="@Url.Action("PrimkeReport")" class="btn btn-lg btn-warning"><span class="glyphicon glyphicon-file"></span> Primke</a>
+        </div>
+        <div class="col-xs-6">
+            <a href="@Url.Action("IzdatniceReport")" class="btn btn-lg btn-info"><span class="glyphicon glyphicon-file"></span> Izdatnice</a>
+        </div>
+    </div>
+
+<hr />
+<div class="row">
+    <div class="col-xs-6">
+        <a href="@Url.Action("ProizvodReport")" class="btn btn-lg btn-danger"><span class="glyphicon glyphicon-qrcode"></span> Proizvodi</a>
+    </div>
+</div>
+

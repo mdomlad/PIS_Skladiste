@@ -1,16 +1,13 @@
-﻿@using Web.Models.BirmiStorage
-@model IEnumerable<Izdatnica>
+﻿@model IEnumerable<Web.Models.BirmiStorage.Izdatnica>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Izvještaji";
+    Layout = "~/Views/Shared/_PdfLayout.cshtml";
 }
 
 <h2>Popis izdatnica</h2>
 
-<p>
-    @Html.ActionLink("Nova", "Create")
-</p>
-<table class="table">
+<table class="table" data-toggle="table">
     <tr>
         <th>
             Oznaka
@@ -24,7 +21,6 @@
         <th>
             @Html.DisplayNameFor(model => model.Status.Naziv)
         </th>
-        <th></th>
     </tr>
 
     @foreach (var item in Model)
@@ -41,14 +37,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Status.Naziv)
-            </td>
-            <td>
-                @if (item.Status.Label != StatusDokumenta.CANCELED && item.Status.Label != StatusDokumenta.CLOSED)
-                {
-                    @Html.ActionLink("Uredi", "Edit", new { id = item.ID }) @:|
-                }
-                @Html.ActionLink("Detalji", "Details", new { id = item.ID })
-                <a target="_blank" href="@Url.Action("IzdatnicaReport", "Report",  new { id = item.ID })" class="btn btn-danger"><i class="glyphicon glyphicon-paperclip"></i> PDF</a>
             </td>
         </tr>
     }

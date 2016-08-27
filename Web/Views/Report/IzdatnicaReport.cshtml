@@ -1,22 +1,14 @@
-﻿@using Web.Models.BirmiStorage
-@model Web.ViewModels.IzdatnicaViewModel
+﻿@model Web.ViewModels.IzdatnicaViewModel
 
 @{
-    ViewBag.Title = "Detalji";
+    ViewBag.Title = "Izvještaji";
+    Layout = "~/Views/Shared/_PdfLayout.cshtml";
 }
 
 <h2>Detalji izdatnice</h2>
 
 <div>
     <dl class="dl-horizontal">
-        <dt>
-            Oznaka
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Izdatnica.ID)
-        </dd>
-
         <dt>
             @Html.DisplayNameFor(model => model.Izdatnica.Djelatnik.Fullname)
         </dt>
@@ -44,18 +36,10 @@
     </dl>
 </div>
 
-<h4>Stavke</h4>
+<h4>Stavke Primke</h4>
 <hr />
 @Html.Partial(
         "_StavkeIzdatniceTable",
         Model.Izdatnica.StavkeIzdatnice,
         new ViewDataDictionary(this.ViewData) { { "edit", false } }
     )
-
-<p>
-    @Html.ActionLink("<< Nazad", "Index")
-    @if (!Model.IsClosed && !Model.IsCanceled)
-    {
-       @:| @Html.ActionLink("Uredi >>", "Edit", new { id = Model.Izdatnica.ID }) 
-    }
-</p>

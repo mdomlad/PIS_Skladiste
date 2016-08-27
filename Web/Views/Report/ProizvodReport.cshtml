@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Web.Models.BirmiStorage.Proizvod>
+
+@{
+    ViewBag.Title = "ProizvodReport";
+    Layout = "~/Views/Shared/_PdfLayout.cshtml";
+}
+
+<h2>Proizvodi</h2>
+
+<table data-toggle="table">
+    <thead class="panel-heading">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Naziv)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Opis)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cijena)
+            </th>
+            <th>
+                Jed. Mj.
+            </th>
+            <th>
+                Min. Kol.
+            </th>
+            <th>
+                Maks. Kol.
+            </th>
+            <th>
+                Stanje
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SkladisteLokacija.ProizvodID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Naziv)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Opis)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cijena)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SkladisteLokacija.JedinicaMjere.Naziv)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SkladisteLokacija.MinimalnaKolicina)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SkladisteLokacija.MaksimalnaKolicina)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SkladisteLokacija.Stanje)
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
